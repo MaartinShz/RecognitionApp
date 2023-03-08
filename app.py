@@ -6,10 +6,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
 
+import speech_recognition as sr
+
+
 
 def home():
     st.title("Accueil 🏠")
     st.header("Bienvenue sur la page d'accueil !")
+    
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.write("Parlez maintenant...")
+        audio = r.listen(source)
+        
+    try:
+        text = r.recognize_google(audio, language='en-US')# change in french #'fr-FR'
+        st.write("Vous avez dit: " + text)
+    except sr.UnknownValueError:
+        st.write("Google Speech Recognition n'a pas pu comprendre l'audio")
+    except sr.RequestError as e:
+        st.write("Impossible d'obtenir les résultats de Google Speech Recognition ; {0}".format(e))
 
 
 ################################################################################################################################################################################################################################################
