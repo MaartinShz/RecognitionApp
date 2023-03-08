@@ -15,8 +15,7 @@ import cv2 #pip install opencv-python
 
 def home():
     st.title("Home 🏠")
-    st.header("Welcome in Home page !")
-    
+    st.header("Welcome in Home page!")
     
     
     def recognize_speech():
