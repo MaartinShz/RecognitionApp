@@ -1,13 +1,15 @@
 #DEBUG MODE #streamlit run --global.developmentMode=true app.py
-import streamlit as st
+#NORMAL MODE #streamlit run --global.developmentMode=true app.py
+
+import streamlit as st #pip install streamlit
 import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
 import plotly.express as px
 
-import speech_recognition as sr
-import cv2
+import speech_recognition as sr #pip install SpeechRecognition
+import cv2 #pip install opencv-python
 
 
 
@@ -25,21 +27,16 @@ def home():
             audio = r.listen(source)
             try:
                 text = r.recognize_google(audio, language='fr-FR' ,show_all=True)# change language #'en-US' # ou 'en-GB'
-                
-            
                 listtext = []
                 if(len(text)>0):   
                     for i in text["alternative"]:
                         listtext.append(i["transcript"])
-
-                 #return listetext
-
+                        
             except sr.UnknownValueError:
-                text = "Je n'ai pas compris ce que vous avez dit"
-                 #st.write("Je n'ai pas compris ce que vous avez dit")
+                print("Je n'ai pas compris ce que vous avez dit")
             except sr.RequestError as e:
-                text="Une erreur s'est produite : {}".format(e)
-                 #st.write("Une erreur s'est produite : {}".format(e))
+                print("Une erreur s'est produite : {}".format(e))
+    
             return listtext             
      
     while True:
@@ -93,15 +90,10 @@ def home():
                     st.warning("recording")
                     break
                 
-           
-            
-            
-            
-
-
 ################################################################################################################################################################################################################################################
 def page1():
     st.title("Page 1 📺")
+    
     
     
 ################################################################################################################################################################################################################################################
@@ -109,22 +101,13 @@ def page2():
     st.title("Page 2 🛡")
     
     
-    
    
 ################################################################################################################################################################################################################################################
 def page3():
     st.title("Page 3 ⚔")
     
-
     
-    
-
-
-
-    
- 
-    
-    
+       
 ##################################### MENU ################################################################################################################################################
 # page list
 pages = {
@@ -138,6 +121,6 @@ pages = {
 st.sidebar.title("Menu 📊")
 selection = st.sidebar.radio("Aller à", list(pages.keys()))
 
-# exexute page select
+# Display Select Page
 page = pages[selection]
 page()
