@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 import speech_recognition as sr
+import cv2
 
 
 
@@ -14,9 +15,10 @@ def home():
     st.title("Home 🏠")
     st.header("Welcome in Home page !")
     
-    r = sr.Recognizer()
+    
     
     def recognize_speech():
+        r = sr.Recognizer()
         with sr.Microphone() as source:
             st.write("Parlez...")
             r.adjust_for_ambient_noise(source, duration=0.5)
@@ -68,7 +70,7 @@ def home():
             ###
             
             if("démarre") in wordlisttext:
-                st.warning("start")
+                #st.warning("start")
                 if("webcam") in wordlisttext:
                     st.warning("webcam")
                     break
@@ -80,7 +82,7 @@ def home():
                     break
                 
             elif("arrête") in wordlisttext:
-                st.warning("stop")
+                #st.warning("stop")
                 if("webcam") in wordlisttext:
                     st.warning("webcam")
                     break
