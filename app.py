@@ -22,33 +22,41 @@ def home():
             r.adjust_for_ambient_noise(source, duration=0.5)
             audio = r.listen(source)
             try:
-                text = r.recognize_google(audio, language='en-GB')# change language #'en-US' # ou 'en-GB'
-                 #return text
+                text = r.recognize_google(audio, language='en-GB' ,show_all=True)# change language #'en-US' # ou 'en-GB'
+                
+            
+                latlng = []
+                if(len(text)>0):   
+                    for i in text["alternative"]:
+                        latlng.append(i["transcript"])
+
+                 #return latlng
+
             except sr.UnknownValueError:
                 text = "Je n'ai pas compris ce que vous avez dit"
                  #st.write("Je n'ai pas compris ce que vous avez dit")
             except sr.RequestError as e:
                 text="Une erreur s'est produite : {}".format(e)
                  #st.write("Une erreur s'est produite : {}".format(e))
-            return text.lower()              
+            return latlng             
      
     while True:
-        text = recognize_speech()
-        st.write("Vous avez dit : {}".format(text))
+        latlng = recognize_speech()
+        st.write(latlng)
         
-        if("start webcam" in text):
+        if("start webcam" in latlng):
             st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
-        elif("stop webcam" in text):
+        elif("turn off webcam" in latlng):
             st.warning("Stop WebCAM !!!!!!!!!!!!!!!!")
             
-        elif("start detection" in text):
+        elif("start detection" in latlng):
             st.warning("Start detection !!!!!!!!!!!!!!!!")
-        elif("stop detection" in text):
+        elif("turn off detection" in latlng):
             st.warning("Stop detection !!!!!!!!!!!!!!!!")
         
-        elif("start recording" in text):
+        elif("start recording" in latlng):
             st.warning("Start recording !!!!!!!!!!!!!!!!")
-        elif("stop recording" in text):
+        elif("turn off recording" in latlng):
             st.warning("Stop recording !!!!!!!!!!!!!!!!")
 
 
