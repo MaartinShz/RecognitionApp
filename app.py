@@ -1,4 +1,4 @@
-# streamlit run --debug app.py
+#DEBUG MODE #streamlit run --global.developmentMode=true app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
