@@ -22,15 +22,15 @@ def home():
             r.adjust_for_ambient_noise(source, duration=0.5)
             audio = r.listen(source)
             try:
-                text = r.recognize_google(audio, language='en-GB' ,show_all=True)# change language #'en-US' # ou 'en-GB'
+                text = r.recognize_google(audio, language='fr-FR' ,show_all=True)# change language #'en-US' # ou 'en-GB'
                 
             
-                latlng = []
+                listtext = []
                 if(len(text)>0):   
                     for i in text["alternative"]:
-                        latlng.append(i["transcript"])
+                        listtext.append(i["transcript"])
 
-                 #return latlng
+                 #return listetext
 
             except sr.UnknownValueError:
                 text = "Je n'ai pas compris ce que vous avez dit"
@@ -38,26 +38,63 @@ def home():
             except sr.RequestError as e:
                 text="Une erreur s'est produite : {}".format(e)
                  #st.write("Une erreur s'est produite : {}".format(e))
-            return latlng             
+            return listtext             
      
     while True:
-        latlng = recognize_speech()
-        st.write(latlng)
+        listtext = recognize_speech()
+        st.write(listtext)
         
-        if("start webcam" in latlng):
-            st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
-        elif("turn off webcam" in latlng):
-            st.warning("Stop WebCAM !!!!!!!!!!!!!!!!")
+        for wordlisttext in listtext:
             
-        elif("start detection" in latlng):
-            st.warning("Start detection !!!!!!!!!!!!!!!!")
-        elif("turn off detection" in latlng):
-            st.warning("Stop detection !!!!!!!!!!!!!!!!")
-        
-        elif("start recording" in latlng):
-            st.warning("Start recording !!!!!!!!!!!!!!!!")
-        elif("turn off recording" in latlng):
-            st.warning("Stop recording !!!!!!!!!!!!!!!!")
+            # if("démarre webcam" in wordlisttext):
+            #     st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
+            #     break
+            # elif("arrête webcam" in wordlisttext):
+            #     st.warning("Stop WebCAM !!!!!!!!!!!!!!!!")
+            #     break
+            # elif("démarre reconnaissance" in wordlisttext):
+            #     st.warning("Start detection !!!!!!!!!!!!!!!!")
+            #     break
+            # elif("arrête reconnaissance" in wordlisttext):
+            #     st.warning("Stop detection !!!!!!!!!!!!!!!!")
+            #     break
+            # elif("démarre enregistrement" in wordlisttext):
+            #     st.warning("Start recording !!!!!!!!!!!!!!!!")
+            #     break
+            # elif("arrête enregistrement" in wordlisttext):
+            #     st.warning("Stop recording !!!!!!!!!!!!!!!!")
+            #     break
+            
+            ###
+            
+            if("démarre") in wordlisttext:
+                st.warning("start")
+                if("webcam") in wordlisttext:
+                    st.warning("webcam")
+                    break
+                elif("reconnaissance") in wordlisttext:
+                    st.warning("detection")
+                    break
+                elif("enregistrement") in wordlisttext:
+                    st.warning("recording")
+                    break
+                
+            elif("arrête") in wordlisttext:
+                st.warning("stop")
+                if("webcam") in wordlisttext:
+                    st.warning("webcam")
+                    break
+                elif("reconnaissance") in wordlisttext:
+                    st.warning("detection")
+                    break
+                elif("enregistrement") in wordlisttext:
+                    st.warning("recording")
+                    break
+                
+           
+            
+            
+            
 
 
 ################################################################################################################################################################################################################################################
