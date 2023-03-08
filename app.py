@@ -35,6 +35,7 @@ def home():
     while True:
         text = recognize_speech()
         st.write("Vous avez dit : {}".format(text))
+        
         if("start webcam" in text):
             st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
         elif("stop webcam" in text):
@@ -49,29 +50,6 @@ def home():
             st.warning("Start recording !!!!!!!!!!!!!!!!")
         elif("stop recording" in text):
             st.warning("Stop recording !!!!!!!!!!!!!!!!")
-
-    # Initialiser l'objet Recognizer
-    # r = sr.Recognizer()
-    # # Fonction de rappel pour la méthode listen_in_background()
-    # def callback(recognizer, audio):
-    #     try:
-    #         st.write('Parlez svp ')
-    #         text = recognizer.recognize_google(audio, language='fr-FR')# change in french #'fr-FR'
-    #         st.write("Vous avez dit: " + text)
-    #     except sr.UnknownValueError:
-    #         st.write("Google Speech Recognition n'a pas pu comprendre l'audio")
-    #     except sr.RequestError as e:
-    #         st.write("Impossible d'obtenir les résultats de Google Speech Recognition ; {0}".format(e))
-    
-    # # Utiliser la méthode listen_in_background() pour écouter en continu
-    # with sr.Microphone() as source:
-    #     r.adjust_for_ambient_noise(source, duration=0.5) # Régler le niveau de bruit ambiant
-    #     stop_listening = r.listen_in_background(source, callback)
-    
-    # # Attendre jusqu'à ce que l'utilisateur clique sur le bouton d'arrêt
-    # stop_button = st.button("Arrêter l'écoute")
-    # if stop_button:
-    #     stop_listening(wait_for_stop=False)
 
 
 ################################################################################################################################################################################################################################################
