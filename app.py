@@ -11,6 +11,7 @@ import plotly.express as px
 import speech_recognition as sr #pip install SpeechRecognition
 import cv2 #pip install opencv-python
 
+#import des pages streamlit
 import Alimentation_image
 
 
