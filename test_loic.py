@@ -8,6 +8,7 @@ import numpy as np
 #from tensorflow import keras
 #from keras.models import load_model
 from tensorflow.keras.models import load_model
+import speech_recognition as sr
 
 path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
@@ -126,8 +127,9 @@ st.write("Cette application permet de reconnaître des visages et d'identifier l
 st.write("Pour l'utiliser, cliquez sur le bouton ci-dessous pour ouvrir la webcam et lancer l'enregistrement la vidéo.")
 st.write("Après avoir fermé la webcam vous pourrez sauvegarder la vidéo localement ou supprimer l'enregistrement grâce aux boutons latéraux.")
 st.write("Nous pouvons également utiliser notre application grâce à la reconnaissance vocale. Pour cela, il suffit de dire 'Ouvrir la webcam' ou 'Arrêter la webcam'.")
+Open_webcam = st.button('Ouvrir la webcam')
 
-if st.button('Open Camera'):
+def Affichage_webcam():
     st.write('Camera is open')
     # Open camera with OpenCV and keep in video stream:
     video_stream = cv.VideoCapture(0)
@@ -159,9 +161,14 @@ if st.button('Open Camera'):
     cv.destroyAllWindows()
     st.write('Camera is stopped')
 
-    video_stream.release()
-    cv.destroyAllWindows()
-    st.write('Camera is stopped')
+
+if Open_webcam:
+    Affichage_webcam()
+
+test = 0
+def stop_webcamp():
+    test = 1
+
 
     # Rerun the app to show the sidebar for saving video
     st.experimental_rerun()
@@ -178,3 +185,61 @@ if st.sidebar.button('Supprimer la vidéo'):
 if st.sidebar.button('Enregistrer la vidéo'):
     st.write("La vidéo va être enregistrée...")
     st.experimental_rerun()
+
+def recognize_speech():
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            st.write("Parlez...")
+            r.adjust_for_ambient_noise(source, duration=0.5)
+            audio = r.listen(source)
+            try:
+                text = r.recognize_google(audio, language='fr-FR' ,show_all=True)# change language #'en-US' # ou 'en-GB'
+                listtext = []
+                if(len(text)>0):   
+                    for i in text["alternative"]:
+                        listtext.append(i["transcript"])
+                        
+            except sr.UnknownValueError:
+                print("Je n'ai pas compris ce que vous avez dit")
+            except sr.RequestError as e:
+                print("Une erreur s'est produite : {}".format(e))
+    
+            return listtext
+
+
+def Reco_voc():
+    listtext = recognize_speech()
+    st.write(listtext)
+    for wordlisttext in listtext:           
+            
+        if("démarre") in wordlisttext:
+            #st.warning("start")
+            if("webcam") in wordlisttext:
+                    #st.warning("webcam")
+                Affichage_webcam()
+                Reco_voc()
+                break
+            elif("reconnaissance") in wordlisttext:
+                st.warning("detection")
+                break
+            elif("enregistrement") in wordlisttext:
+                st.warning("recording")
+                break
+                
+        elif("arrête") in wordlisttext:
+            #st.warning("stop")
+            if("webcam") in wordlisttext:
+                st.warning("webcam")
+                break
+            elif("reconnaissance") in wordlisttext:
+                st.warning("detection")
+                break
+            elif("enregistrement") in wordlisttext:
+                st.warning("recording")
+                break
+
+
+
+if st.button("Lancer la reconnaissance vocale"):
+    Reco_voc()
+
