@@ -11,6 +11,8 @@ import plotly.express as px
 import speech_recognition as sr #pip install SpeechRecognition
 import cv2 #pip install opencv-python
 
+import Alimentation_image
+
 
 
 def home():
@@ -104,8 +106,7 @@ def page2():
     
    
 ################################################################################################################################################################################################################################################
-def page3():
-    st.title("Page 3 ⚔")
+
     
     
        
@@ -115,7 +116,7 @@ pages = {
     "Home 🏠": home,
     "Page 1 📺": page1,
     "Page 2 🛡": page2,
-    "Page 3 ⚔": page3
+    "Page 3 ⚔": Alimentation_image.page3
 }
 
 # Navigation bar
