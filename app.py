@@ -1,5 +1,5 @@
 #DEBUG MODE #streamlit run --global.developmentMode=true app.py
-#NORMAL MODE #streamlit run --global.developmentMode=true app.py
+#NORMAL MODE #streamlit run app.py
 
 import streamlit as st #pip install streamlit
 import pandas as pd
@@ -88,7 +88,9 @@ def home():
                 elif("enregistrement") in wordlisttext:
                     st.warning("recording")
                     break
-                
+    
+
+
 ################################################################################################################################################################################################################################################
 def page1():
     st.title("Page 1 📺")
