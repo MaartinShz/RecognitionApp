@@ -132,8 +132,8 @@ if st.button('Open Camera'):
     fourcc = cv.VideoWriter_fourcc(*'mp4v')
     out = cv.VideoWriter(str(enregistrement_dir)+'output_0.mp4',fourcc, 3.7, (width,heigth))
     video_placeholder = st.empty()
-    stop_button = st.button('Stop Camera')
-    while not stop_button:
+    stop_webcam = st.button('Arrêter la webcam')
+    while not stop_webcam:
         ret, frame = video_stream.read()
         if ret:
             frame = cv.flip(frame, 1)
@@ -146,12 +146,25 @@ if st.button('Open Camera'):
             video_placeholder.image(frame, channels="BGR")
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+    if stop_webcam:
+        st.experimental_rerun()
     
     video_stream.release()
     out.release()
     cv.destroyAllWindows()
     st.write('Camera is stopped')
-    
+
     video_stream.release()
     cv.destroyAllWindows()
     st.write('Camera is stopped')
+
+    # Rerun the app to show the sidebar for saving video
+    st.experimental_rerun()
+
+if st.sidebar.button('Supprimer la vidéo'):
+    st.write("La vidéo va être supprimé...")
+    os.remove(str(enregistrement_dir)+'output_0.mp4')
+
+if st.sidebar.button('Enregistrer la vidéo'):
+    st.write("La vidéo va être enregistrée...")
+    st.experimental_rerun()
