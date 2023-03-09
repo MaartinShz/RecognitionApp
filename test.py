@@ -4,8 +4,8 @@ import face_recognition
 import pickle
 import os
 import numpy as np
-#from keras_vggface.vggface import VGGFace
-#from keras_vggface.utils import preprocess_input
+from keras_vggface.vggface import VGGFace
+from keras_vggface.utils import preprocess_input
 
 path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
@@ -15,7 +15,7 @@ with open(str(encoded_dir)+'known_faces.pkl', 'rb') as f:
     known_face_encodings, known_face_names = pickle.load(f)
 
 # Charger le modèle VGGFace pré-entraîné sur la base de données Fer2013 pour la reconnaissance d'émotions
-#emotion_model = VGGFace(model='resnet50')
+emotion_model = VGGFace(model='resnet50')
 
 def predict_emotion(frame, face_locations):
     # Récupérer le visage détecté et le recadrer pour avoir uniquement le visage
