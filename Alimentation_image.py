@@ -7,7 +7,7 @@ import os
 
 
 def page3():
-    st.title("Page 3 ⚔")
+    st.title("Alimentation des Images")
     path = os.getcwd()
     encoded_dir = str(path) + "/dossier_encoded/"
     etu_dir = str(path) + "/etu/"

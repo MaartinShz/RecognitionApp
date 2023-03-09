@@ -116,7 +116,7 @@ pages = {
     "Home 🏠": home,
     "Page 1 📺": page1,
     "Page 2 🛡": page2,
-    "Page 3 ⚔": Alimentation_image.page3
+    "Alimentation des Images": Alimentation_image.page3
 }
 
 # Navigation bar
