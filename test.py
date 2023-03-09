@@ -4,10 +4,8 @@ import face_recognition
 import pickle
 import os
 import numpy as np
-#from keras.preprocessing.image import img_to_array
-#from tensorflow import keras
-#from keras.models import load_model
 from tensorflow.keras.models import load_model
+import plotly.graph_objects as go
 
 path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
@@ -20,7 +18,6 @@ with open(str(encoded_dir)+'known_faces.pkl', 'rb') as f:
 
 #Model emotion
 model_emotion = load_model(model_dir+'Emotion_Detection.h5', compile=False)
-class_labels = ['Angry','Happy','Neutral','Sad','Surprise']
 
 #Model age
 AGE_PROTO = 'age_deploy.prototxt'
@@ -37,8 +34,76 @@ gender_net = cv.dnn.readNetFromCaffe(model_dir+GENDER_PROTO, model_dir+GENDER_MO
 
 
 # Définir les émotions à prédire
-emotions = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
+emotionsList = ['angry', 'happy', 'sad', 'surprise', 'neutral']
 genderList = ['Male', 'Female']
+
+def plot_age_indicator(face_age):
+    # Valeur prédite de l'âge
+
+    data_tuple = tuple(map(int, face_age[0].strip("() ").split(",")))
+
+    # Calcul de la moyenne
+    age_pred = sum(data_tuple) / len(data_tuple) 
+
+    # Créer le graphique avec la jauge et le nombre
+    fig = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        value = age_pred, 
+        domain = {'x': [0, 1], 'y': [0, 1]},
+        title = {'text': "Age de l'utilisateur"},
+        gauge = {
+            'axis': {'range': [1, 100]},
+            'bar': {'color': "green"},
+        }
+    ))
+    return fig
+
+def plot_emotion_wheel(emotion_scores):
+    # Trier les scores par ordre décroissant pour obtenir les émotions les plus probables
+    sorted_scores = sorted(emotion_scores.items(), key=lambda x: x[1], reverse=True)
+
+    # Définir les couleurs pour chaque quadrant de la Roue des émotions
+    colors = {'Positive': '#ffadad', 'Neutral': '#fdffb6', 'Negative': '#caffbf'}
+
+    # Définir les émotions pour chaque quadrant de la Roue des émotions
+    emotions = {'Positive': ['happy', 'surprise'], 'Neutral': ['neutral'], 'Negative': ['angry', 'sad']}
+
+    # Récupérer l'émotion la plus probable
+    most_likely_emotion = sorted_scores[0][0]
+
+    # Déterminer le quadrant de la Roue des émotions correspondant à l'émotion la plus probable
+    for quadrant, emotions_list in emotions.items():
+        if most_likely_emotion in emotions_list:
+            break
+
+    # Placer l'émotion sur la Roue des émotions en fonction de son intensité
+
+    fig.add_trace(go.Pie(values=[1-emotion_scores[most_likely_emotion], emotion_scores[most_likely_emotion]], 
+                        hole=.5, 
+                        marker_colors=[colors[quadrant], '#ffffff'],
+                        textinfo='none',
+                        direction='clockwise',
+                        rotation=-90))
+    fig.update_traces(hoverinfo='none')
+    fig.update_layout(annotations=[dict(text=most_likely_emotion, font_size=24, showarrow=False, x=0.5, y=0.5)],
+                    width=500,
+                    height=500,
+                    margin=dict(l=0, r=0, t=0, b=0))
+    return fig
+
+def show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions):
+    # Draw a rectangle around the face
+    for (top, right, bottom, left), name, gender, age, emotion in zip(face_locations, face_names, face_gender, face_age, face_emotions):
+        # Draw a purple box around the face
+        cv.rectangle(frame, (left, top), (right, bottom), (238, 130, 238), 2)
+
+        # Draw labels with the name, gender, age, and emotion below the face
+        cv.rectangle(frame, (left, bottom), (right, bottom + 90), (238, 130, 238), cv.FILLED)
+        font = cv.FONT_HERSHEY_DUPLEX
+        cv.putText(frame, name, (left + 6, bottom + 20), font, 0.7, (255, 255, 255), 1)
+        cv.putText(frame, gender, (left + 6, bottom + 40), font, 0.7, (255, 255, 255), 1)
+        cv.putText(frame, age, (left + 6, bottom + 60), font, 0.7, (255, 255, 255), 1)
+        cv.putText(frame, emotion, (left + 6, bottom + 80), font, 0.7, (255, 255, 255), 1)
 
 def detect_faces(frame, known_face_encodings, known_face_names):
     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
@@ -52,6 +117,7 @@ def detect_faces(frame, known_face_encodings, known_face_names):
     face_gender=[]
     face_age=[]
     face_emotions =[]
+    emotion_scores = {}
 
     # Loop through each face encoding in the current frame of video
     for face_encoding in face_encodings:
@@ -94,48 +160,55 @@ def detect_faces(frame, known_face_encodings, known_face_names):
         # Trouver l'index de la prédiction d'émotion la plus élevée
         emotion_index = np.argmax(emotion_predictions)
         # Trouver le nom de l'émotion correspondant à l'index
-        emotion = class_labels[emotion_index]
+        emotion = emotionsList[emotion_index]
+        angry_score, happy_score, sad_score, surprise_score, neutral_score = emotion_predictions[0]
 
+        # Placer les scores de prédiction dans un dictionnaire
+        emotion_scores = {'angry': angry_score, 'happy': happy_score, 'sad': sad_score, 'surprise': surprise_score, 'neutral': neutral_score}
         # Add the name, gender, age, and emotion to the list of face names
         face_names.append(name)
         face_gender.append(gender)
         face_age.append(age)
         face_emotions.append(emotion)
+        print(face_age)
+    return face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores
 
-    # Draw a rectangle around the face
-    for (top, right, bottom, left), name, gender, age, emotion in zip(face_locations, face_names, face_gender, face_age, face_emotions):
-        # Draw a purple box around the face
-        cv.rectangle(frame, (left, top), (right, bottom), (238, 130, 238), 2)
-
-        # Draw labels with the name, gender, age, and emotion below the face
-        cv.rectangle(frame, (left, bottom), (right, bottom + 90), (238, 130, 238), cv.FILLED)
-        font = cv.FONT_HERSHEY_DUPLEX
-        cv.putText(frame, name, (left + 6, bottom + 20), font, 0.7, (255, 255, 255), 1)
-        cv.putText(frame, gender, (left + 6, bottom + 40), font, 0.7, (255, 255, 255), 1)
-        cv.putText(frame, age, (left + 6, bottom + 60), font, 0.7, (255, 255, 255), 1)
-        cv.putText(frame, emotion, (left + 6, bottom + 80), font, 0.7, (255, 255, 255), 1)
-
-    return frame
-
-
-
-
-
+fig = go.Figure()   
 if st.button('Open Camera'):
     st.write('Camera is open')
     # Open camera with OpenCV and keep in video stream:
     video_stream = cv.VideoCapture(0)
     video_placeholder = st.empty()
+    graphe_emotion_placeholder = st.empty()
+    graphe_age_placeholder = st.empty()
     stop_button = st.button('Stop Camera')
     while not stop_button:
         ret, frame = video_stream.read()
         if ret:
-            # Detect faces in the current frame of video
-            detect_faces(frame, known_face_encodings, known_face_names)
+            face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores = detect_faces(frame, known_face_encodings, known_face_names)
+            show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
+            
+            #ca affiche 0 c'est bizarre 
+            if face_age: 
+                #graph_elem = st.plotly_chart(fig)
+                fig_age = plot_age_indicator(face_age)
+                graphe_age_placeholder.plotly_chart(fig_age)
+            else :
+                graphe_age_placeholder.image(path+"/emotion.jpg")
+
+            #ca affiche 0 c'est bizarre 
+            if bool(emotion_scores): 
+                #graph_elem = st.plotly_chart(fig)
+                fig_maj = plot_emotion_wheel(emotion_scores)
+                graphe_emotion_placeholder.plotly_chart(fig_maj)
+            else :
+                graphe_emotion_placeholder.image(path+"/emotion.jpg")
             # Display the resulting image
             video_placeholder.image(frame, channels="BGR")
+
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+
     
     video_stream.release()
     cv.destroyAllWindows()
