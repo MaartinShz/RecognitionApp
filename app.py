@@ -248,7 +248,7 @@ def page3():
     etu_dir = str(path) + "/etu/"
 
 
-    st.write(" Ou alors prenez une photo avec la webcam :")
+    st.write(" Ou alors prenez une photo avec la Webcam :")
 
 
     # Open Webcam
@@ -278,8 +278,10 @@ def page3():
             face_encoding = face_recognition.face_encodings(image)[0]#
             known_face_encodings.append(face_encoding)
             known_face_names.append(image_file.name.split(".")[0])
+            #st.warning("Visage non détecté")
         except:
             st.warning("Attention Visage non détecté. Utilise une autre photo")
+            os.remove(etu_dir + user_input + ".jpeg")
 
 
     # registred list in pickle file
