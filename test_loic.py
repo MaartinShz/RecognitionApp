@@ -120,7 +120,12 @@ def detect_faces(frame, known_face_encodings, known_face_names):
 
 
 
-
+st.title("Reconnaissance faciale")
+st.header("Bienvenue sur la page de notre application !")
+st.write("Cette application permet de reconnaître des visages et d'identifier les émotions, le genre et l'âge des personnes présentes sur une vidéo.")
+st.write("Pour l'utiliser, cliquez sur le bouton ci-dessous pour ouvrir la webcam et lancer l'enregistrement la vidéo.")
+st.write("Après avoir fermé la webcam vous pourrez sauvegarder la vidéo localement ou supprimer l'enregistrement grâce aux boutons latéraux.")
+st.write("Nous pouvons également utiliser notre application grâce à la reconnaissance vocale. Pour cela, il suffit de dire 'Ouvrir la webcam' ou 'Arrêter la webcam'.")
 
 if st.button('Open Camera'):
     st.write('Camera is open')
@@ -161,9 +166,14 @@ if st.button('Open Camera'):
     # Rerun the app to show the sidebar for saving video
     st.experimental_rerun()
 
+st.sidebar.title("Enregistrement de la vidéo")
+st.sidebar.header("Vous pouvez enregistrer la vidéo ou la supprimer en cliquant sur les boutons ci-dessous.")
+st.sidebar.write("Pensez bien à lancer la webcam et de l'éteindre avant de cliquer sur les boutons.")
+
 if st.sidebar.button('Supprimer la vidéo'):
     st.write("La vidéo va être supprimé...")
     os.remove(str(enregistrement_dir)+'output_0.mp4')
+    st.experimental_rerun()
 
 if st.sidebar.button('Enregistrer la vidéo'):
     st.write("La vidéo va être enregistrée...")
