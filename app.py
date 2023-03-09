@@ -1,15 +1,15 @@
 #DEBUG MODE #streamlit run --global.developmentMode=true app.py
-#NORMAL MODE #streamlit run --global.developmentMode=true app.py
+#NORMAL MODE #streamlit run app.py
 
 import streamlit as st #pip install streamlit
-import pandas as pd
-import numpy as np
+#import pandas as pd
+#import numpy as np
 
-import matplotlib.pyplot as plt
-import plotly.express as px
+#import matplotlib.pyplot as plt
+#import plotly.express as px
 
 import speech_recognition as sr #pip install SpeechRecognition
-import cv2 #pip install opencv-python
+#import cv2 #pip install opencv-python
 
 
 
@@ -38,57 +38,59 @@ def home():
     
             return listtext             
      
-    while True:
-        listtext = recognize_speech()
-        st.write(listtext)
+    # while True:
+    #     listtext = recognize_speech()
+    #     st.write(listtext)
         
-        for wordlisttext in listtext:
+    #     for wordlisttext in listtext:
             
-            # if("démarre webcam" in wordlisttext):
-            #     st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
-            #     break
-            # elif("arrête webcam" in wordlisttext):
-            #     st.warning("Stop WebCAM !!!!!!!!!!!!!!!!")
-            #     break
-            # elif("démarre reconnaissance" in wordlisttext):
-            #     st.warning("Start detection !!!!!!!!!!!!!!!!")
-            #     break
-            # elif("arrête reconnaissance" in wordlisttext):
-            #     st.warning("Stop detection !!!!!!!!!!!!!!!!")
-            #     break
-            # elif("démarre enregistrement" in wordlisttext):
-            #     st.warning("Start recording !!!!!!!!!!!!!!!!")
-            #     break
-            # elif("arrête enregistrement" in wordlisttext):
-            #     st.warning("Stop recording !!!!!!!!!!!!!!!!")
-            #     break
+    #         # if("démarre webcam" in wordlisttext):
+    #         #     st.warning("Start WebCAM !!!!!!!!!!!!!!!!")
+    #         #     break
+    #         # elif("arrête webcam" in wordlisttext):
+    #         #     st.warning("Stop WebCAM !!!!!!!!!!!!!!!!")
+    #         #     break
+    #         # elif("démarre reconnaissance" in wordlisttext):
+    #         #     st.warning("Start detection !!!!!!!!!!!!!!!!")
+    #         #     break
+    #         # elif("arrête reconnaissance" in wordlisttext):
+    #         #     st.warning("Stop detection !!!!!!!!!!!!!!!!")
+    #         #     break
+    #         # elif("démarre enregistrement" in wordlisttext):
+    #         #     st.warning("Start recording !!!!!!!!!!!!!!!!")
+    #         #     break
+    #         # elif("arrête enregistrement" in wordlisttext):
+    #         #     st.warning("Stop recording !!!!!!!!!!!!!!!!")
+    #         #     break
             
-            ###
+    #         ###
             
-            if("démarre") in wordlisttext:
-                #st.warning("start")
-                if("webcam") in wordlisttext:
-                    st.warning("webcam")
-                    break
-                elif("reconnaissance") in wordlisttext:
-                    st.warning("detection")
-                    break
-                elif("enregistrement") in wordlisttext:
-                    st.warning("recording")
-                    break
+    #         if("démarre") in wordlisttext:
+    #             #st.warning("start")
+    #             if("webcam") in wordlisttext:
+    #                 st.warning("webcam")
+    #                 break
+    #             elif("reconnaissance") in wordlisttext:
+    #                 st.warning("detection")
+    #                 break
+    #             elif("enregistrement") in wordlisttext:
+    #                 st.warning("recording")
+    #                 break
                 
-            elif("arrête") in wordlisttext:
-                #st.warning("stop")
-                if("webcam") in wordlisttext:
-                    st.warning("webcam")
-                    break
-                elif("reconnaissance") in wordlisttext:
-                    st.warning("detection")
-                    break
-                elif("enregistrement") in wordlisttext:
-                    st.warning("recording")
-                    break
-                
+    #         elif("arrête") in wordlisttext:
+    #             #st.warning("stop")
+    #             if("webcam") in wordlisttext:
+    #                 st.warning("webcam")
+    #                 break
+    #             elif("reconnaissance") in wordlisttext:
+    #                 st.warning("detection")
+    #                 break
+    #             elif("enregistrement") in wordlisttext:
+    #                 st.warning("recording")
+    #                 break
+    
+
+
 ################################################################################################################################################################################################################################################
 def page1():
     st.title("Page 1 📺")
