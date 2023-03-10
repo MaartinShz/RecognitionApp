@@ -6,10 +6,12 @@ import os
 import numpy as np
 from tensorflow.keras.models import load_model
 import plotly.graph_objects as go
+from PIL import Image
 
 path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
 model_dir = str(path) + "/models/"
+path_dir = str(path) + "/assets/"
 
 # Charger les listes depuis le fichier pickle
 with open(str(encoded_dir)+'known_faces.pkl', 'rb') as f:
@@ -50,12 +52,13 @@ def plot_age_indicator(face_age):
         mode = "gauge+number",
         value = age_pred, 
         domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "Age de l'utilisateur"},
+        title = {'text': "Age"},
         gauge = {
             'axis': {'range': [1, 100]},
             'bar': {'color': "green"},
         }
     ))
+    fig.update_layout(width=280, height=280)
     return fig
 
 def plot_emotion_wheel(emotion_scores):
@@ -63,7 +66,7 @@ def plot_emotion_wheel(emotion_scores):
     sorted_scores = sorted(emotion_scores.items(), key=lambda x: x[1], reverse=True)
 
     # Définir les couleurs pour chaque quadrant de la Roue des émotions
-    colors = {'Positive': '#ffadad', 'Neutral': '#fdffb6', 'Negative': '#caffbf'}
+    colors = {'Positive': '#00a8cc', 'Neutral': '#6c757d', 'Negative': '#ff6b6b'}
 
     # Définir les émotions pour chaque quadrant de la Roue des émotions
     emotions = {'Positive': ['happy', 'surprise'], 'Neutral': ['neutral'], 'Negative': ['angry', 'sad']}
@@ -77,19 +80,32 @@ def plot_emotion_wheel(emotion_scores):
             break
 
     # Placer l'émotion sur la Roue des émotions en fonction de son intensité
-
-    fig.add_trace(go.Pie(values=[1-emotion_scores[most_likely_emotion], emotion_scores[most_likely_emotion]], 
-                        hole=.5, 
-                        marker_colors=[colors[quadrant], '#ffffff'],
+    fig = go.Figure()
+    fig.add_trace(go.Pie(values=[emotion_scores[most_likely_emotion], 1-emotion_scores[most_likely_emotion]], 
+                        hole=.7, 
+                        marker_colors=[colors[quadrant], '#f2f2f2'],
                         textinfo='none',
                         direction='clockwise',
-                        rotation=-90))
-    fig.update_traces(hoverinfo='none')
-    fig.update_layout(annotations=[dict(text=most_likely_emotion, font_size=24, showarrow=False, x=0.5, y=0.5)],
-                    width=500,
-                    height=500,
-                    margin=dict(l=0, r=0, t=0, b=0))
+                        rotation=0, 
+                        labels=['Emotion', 'Non emotion']))
+    fig.update_traces(hoverinfo='none', textfont_size=18)
+    fig.update_layout(
+        annotations=[
+            dict(
+                text=most_likely_emotion.capitalize(),
+                font=dict(size=32, color=colors[quadrant]),
+                showarrow=False,
+                x=0.5,
+                y=0.5
+            )
+        ],
+        width=280,
+        height=280,
+        margin=dict(l=0, r=1, t=0, b=0),
+        paper_bgcolor=None
+    )
     return fig
+
 
 def show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions):
     # Draw a rectangle around the face
@@ -106,10 +122,11 @@ def show_infos(frame, face_locations, face_names, face_gender, face_age, face_em
         cv.putText(frame, emotion, (left + 6, bottom + 80), font, 0.7, (255, 255, 255), 1)
 
 def detect_faces(frame, known_face_encodings, known_face_names):
+    #small_frame = cv.resize(frame, (0, 0), fx=0.25, fy=0.25)
     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
     rgb_frame = frame[:, :, ::-1]
 
-    # Find all the faces in the current frame of video
+    
     face_locations = face_recognition.face_locations(rgb_frame, model='hog', number_of_times_to_upsample=1)
     face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
@@ -118,18 +135,20 @@ def detect_faces(frame, known_face_encodings, known_face_names):
     face_age=[]
     face_emotions =[]
     emotion_scores = {}
+    un = False
 
     # Loop through each face encoding in the current frame of video
     for face_encoding in face_encodings:
         # See if the face is a match for any known faces
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
         name = "Unknown"
-        emotion = "Unknown" 
+        emotion = "Unemotional" 
         gender = "Non-binary"
         age = "Older"
 
         # If a match was found in known_face_encodings, just use the first one
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             name = known_face_names[best_match_index]
@@ -170,7 +189,6 @@ def detect_faces(frame, known_face_encodings, known_face_names):
         face_gender.append(gender)
         face_age.append(age)
         face_emotions.append(emotion)
-        print(face_age)
     return face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores
 
 fig = go.Figure()   
@@ -178,36 +196,87 @@ if st.button('Open Camera'):
     st.write('Camera is open')
     # Open camera with OpenCV and keep in video stream:
     video_stream = cv.VideoCapture(0)
+    video_stream.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+    video_stream.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    frame_counter = 0
     video_placeholder = st.empty()
-    graphe_emotion_placeholder = st.empty()
-    graphe_age_placeholder = st.empty()
+
+    # Create two columns
+    col1, col2, col3  = st.columns([1, 1, 1])
+
+    # Place the first chart in the first column
+    with col1:
+        graphe_emotion_placeholder = st.empty()
+        
+    # Place the second chart in the second column, on a new row
+    with col2:
+        graphe_age_placeholder = st.empty()
+
+    with col3 :
+        graphe_gender_placeholder = st.empty()
+
     stop_button = st.button('Stop Camera')
     while not stop_button:
         ret, frame = video_stream.read()
-        if ret:
+        if not ret:
+            break
+            
+        if frame_counter == 0:
+            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            # Appliquer un filtre de flou pour réduire le bruit
+            blurred = cv.GaussianBlur(gray, (5, 5), 0)
+            # Appliquer un seuillage adaptatif pour améliorer le contraste
+            threshold = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, 11, 4)
+
+        frame_counter += 1
+        print(frame_counter)
+        if frame_counter == 4:
+            frame_counter = 0
+
             face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores = detect_faces(frame, known_face_encodings, known_face_names)
             show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
-            
-            #ca affiche 0 c'est bizarre 
-            if face_age: 
-                #graph_elem = st.plotly_chart(fig)
-                fig_age = plot_age_indicator(face_age)
-                graphe_age_placeholder.plotly_chart(fig_age)
-            else :
-                graphe_age_placeholder.image(path+"/emotion.jpg")
 
             #ca affiche 0 c'est bizarre 
-            if bool(emotion_scores): 
-                #graph_elem = st.plotly_chart(fig)
-                fig_maj = plot_emotion_wheel(emotion_scores)
-                graphe_emotion_placeholder.plotly_chart(fig_maj)
+            if len(face_age)==1: 
+                fig_age = plot_age_indicator(face_age)
+                graphe_age_placeholder.plotly_chart(fig_age, use_container_width=False)
             else :
-                graphe_emotion_placeholder.image(path+"/emotion.jpg")
-            # Display the resulting image
+                image = Image.open(path_dir+"age.png")
+                max_size = (300, 300)
+                image.thumbnail(max_size)
+                graphe_age_placeholder.image(image)
+
+            if len(face_emotions)>0: 
+                fig_maj = plot_emotion_wheel(emotion_scores)
+                graphe_emotion_placeholder.plotly_chart(fig_maj, use_container_width=False)
+            elif ((len(face_emotions)==0) or (len(face_age)!=1)):
+                image = Image.open(path_dir+"emotion.png")
+                max_size = (300, 300)
+                image.thumbnail(max_size)
+                graphe_emotion_placeholder.image(image)
+
+            if len(face_gender)==1 :
+                if face_gender[0] == "Male":
+                    men = Image.open(path_dir+"men.png")
+                    max_size = (200, 200)
+                    men.thumbnail(max_size)
+                    graphe_gender_placeholder.image(men)
+                elif face_gender[0] == "Female" :
+                    wem = Image.open(path_dir+"wemen.png")
+                    max_size = (200, 200)
+                    wem.thumbnail(max_size)
+                    graphe_gender_placeholder.image(wem)
+            else :
+                nonb = Image.open(path_dir+"non-binary.png")
+                max_size = (200, 200)
+                nonb.thumbnail(max_size)
+                graphe_gender_placeholder.image(nonb)
+
+            # Display the resulting image            
             video_placeholder.image(frame, channels="BGR")
 
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+        # if cv.waitKey(1) & 0xFF == ord('q'):
+        #     break
 
     
     video_stream.release()
