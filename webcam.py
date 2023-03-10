@@ -191,8 +191,9 @@ def detect_faces(frame, known_face_encodings, known_face_names):
         face_emotions.append(emotion)
     return face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores
 
+
 fig = go.Figure()   
-if st.button('Open Camera'):
+if st.button('Ouvrir caméra'):
     st.write('Camera is open')
     # Open camera with OpenCV and keep in video stream:
     video_stream = cv.VideoCapture(0)
