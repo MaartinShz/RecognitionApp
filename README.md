@@ -12,7 +12,7 @@ martin
 
 ## Fonctionnement de l'application
 
-
+![predict](https://github.com/h-titouan/PLSISE/blob/main/img/function_predict.png)
 
 
 
