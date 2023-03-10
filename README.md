@@ -5,7 +5,9 @@
 Le challenge Web Mining vise à développer une application permettant le pilotage de la webcam d'un ordinateur pour détecter les personnes présentes sur la vidéo en temps réel, et ainsi, reconnaître les étudiants faisant partie de la promotion SISE 2022-2023 en y ajoutant les informations relatives sur leur émotion, genre et âge. L'application doit être pilotée vocalement via le microphone de l'ordinateur et doit s'appuyer sur un modèle prédictif basé sur les photos d'identité étiquetées des étudiants de la promotion.
 
 ## Organisation du repository
-#### *Dans le répertoire assets :* on trouve l'ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
+#### *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
+#### *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion de l'utilisateur
+
 
 
 
