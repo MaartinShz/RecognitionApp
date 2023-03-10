@@ -12,5 +12,5 @@ martin
 
 ## Fonctionnement de l'application
 
-![pres_appli](https://github.com/MaartinShz/RecognitionApp/edit/main/img/pres_appli.png)
+![pres_appli](/img/pres_appli.png)
 
