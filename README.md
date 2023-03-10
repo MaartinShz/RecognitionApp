@@ -30,6 +30,13 @@ cd streamlit
 streamlit run app.py
 
 ```
+Vous pouvez également utiliser le fichier environnement.yml pour créer votre environnement.
+
+```
+conda env create -f environnement.yml
+conda activate challenge
+streamlit run app.py
+```
 
 ## Fonctionnement de l'application
 
