@@ -14,5 +14,3 @@ martin
 
 ![pres_appli](https://github.com/MaartinShz/RecognitionApp/edit/main/img/pres_appli.png)
 
-
-
