@@ -197,7 +197,7 @@ def affichage_webcam():
     video_placeholder = st.empty()
     graphe_emotion_placeholder = st.empty()
     graphe_age_placeholder = st.empty()
-    stop_button = st.button('Stop Camera')
+    stop_button = st.button('Stop webcam')
     while not stop_button:
         ret, frame = video_stream.read()
         if ret:
@@ -235,7 +235,8 @@ def affichage_webcam():
     out.release()
     cv.destroyAllWindows()
     st.write('Camera is stopped')
-
+if open_webcam:
+    affichage_webcam()
 st.sidebar.title("Enregistrement de la vidéo")
 st.sidebar.header("Vous pouvez enregistrer la vidéo ou la supprimer en cliquant sur les boutons ci-dessous.")
 st.sidebar.write("Pensez bien à lancer la webcam et de l'éteindre avant de cliquer sur les boutons.")
