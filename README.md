@@ -25,6 +25,8 @@ pip install speech_recognition
 pip install streamlit
 pip install tenserflow
 pip install --no-cache-dir -r requirements.txt
+
+cd streamlit
 streamlit run app.py
 
 ```
