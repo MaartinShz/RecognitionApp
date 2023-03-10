@@ -12,9 +12,6 @@ Le challenge Web Mining vise à développer une application permettant le pilota
 
 
 
-
-
-
 ## Lancement de l'application
 
 ```
