@@ -35,6 +35,8 @@ Vous pouvez également utiliser le fichier environnement.yml pour créer votre e
 ```
 conda env create -f environnement.yml
 conda activate challenge
+
+cd streamlit
 streamlit run app.py
 ```
 
