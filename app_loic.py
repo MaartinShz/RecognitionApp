@@ -2,10 +2,7 @@
 #NORMAL MODE #streamlit run app.py
 
 import streamlit as st #pip install streamlit
-import pandas as pd
-import numpy as np
 
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 import speech_recognition as sr #pip install SpeechRecognition
@@ -20,6 +17,8 @@ import os
 # import page Visage Detection
 from keras.models import load_model
 
+import webcam
+
 
 path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
@@ -29,7 +28,7 @@ enregistrement_dir = str(path) + "/enregistrement/"
 # Charger les listes depuis le fichier pickle
 with open(str(encoded_dir)+'known_faces.pkl', 'rb') as f:
     known_face_encodings, known_face_names = pickle.load(f)
-import test
+
 
 
 def acceuil():
@@ -69,15 +68,15 @@ def Application():
             ret, frame = video_stream.read()
             if ret:
                 frame = cv.flip(frame, 1)
-                face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores = test.detect_faces(frame, known_face_encodings, known_face_names)
-                test.show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
+                face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores = webcam.detect_faces(frame, known_face_encodings, known_face_names)
+                webcam.show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
                 out.write(frame)
 
                 
                 #ca affiche 0 c'est bizarre 
                 if face_age: 
                     #graph_elem = st.plotly_chart(fig)
-                    fig_age = test.plot_age_indicator(face_age)
+                    fig_age = webcam.plot_age_indicator(face_age)
                     graphe_age_placeholder.plotly_chart(fig_age)
                 else :
                     graphe_age_placeholder.image(path+"/emotion.jpg")
@@ -85,7 +84,7 @@ def Application():
                 #ca affiche 0 c'est bizarre 
                 if bool(emotion_scores): 
                     #graph_elem = st.plotly_chart(fig)
-                    fig_maj = test.plot_emotion_wheel(emotion_scores)
+                    fig_maj = webcam.plot_emotion_wheel(emotion_scores)
                     graphe_emotion_placeholder.plotly_chart(fig_maj)
                 else :
                     graphe_emotion_placeholder.image(path+"/emotion.jpg")
@@ -230,8 +229,8 @@ def reconnaissance_vocale():
     st.title("Reconnaissance vocale")
     st.write("A l'origine nous souhaitions utiliser la reconnaissance vocale pour piloter notre application.")
     st.write("Malheureusement nous n'avons pas réussi à faire fonctionner la reconnaissance vocale pour toutes les fonctionnalitées.")
-    st.write("Dans cet onglet vous pourrez tester les différentes fonctions vocales que nous avions mis en place.")
-    st.write("Testez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''")
+    st.write("Dans cet onglet vous pourrez webcamer les différentes fonctions vocales que nous avions mis en place.")
+    st.write("webcamez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''")
     def recognize_speech():
         r = sr.Recognizer()
         with sr.Microphone() as source:
