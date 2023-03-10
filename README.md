@@ -37,6 +37,6 @@ Une fenêtre s'ouvrira et vous pourrez voir la webcam de votre ordinateur. La d�
 Vous pouvez ajouter des images dans le dossier /etu pour alimenter notre base. Vous pouvez prendre une photo avec votre webcam qui sera importer en local dans le dossier /etu. Il vous faudra ensuite importer la photo pour la transformer et l'ajouter à notre base.
 
 - Reconnaissance vocale
-- 
+
 A l'origine nous souhaitions utiliser la reconnaissance vocale pour piloter notre application. Malheureusement nous n'avons pas réussi à faire fonctionner la reconnaissance vocale pour toutes les fonctionnalitées. Dans cet onglet vous pourrez tester les différentes fonctions vocales que nous avions mis en place. Testez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''
 
