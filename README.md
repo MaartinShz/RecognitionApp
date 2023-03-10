@@ -6,9 +6,9 @@ Le challenge Web Mining vise à développer une application permettant le pilota
 
 ## Organisation du repository
 - *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
-#### *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
-#### *Répertoire img :* Ensemble des images intégrée au readme
-#### *requirements. txt :* Constitue l'ensemble des paquets python nécessaire en vue de l'installation et de l'execution de notre application
+- *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
+- *Répertoire img :* Ensemble des images intégrée au readme
+- *requirements. txt :* Constitue l'ensemble des paquets python nécessaire en vue de l'installation et de l'execution de notre application
 
 
 
