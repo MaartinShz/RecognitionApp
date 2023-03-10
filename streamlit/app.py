@@ -9,7 +9,7 @@ import speech_recognition as sr #pip install SpeechRecognition
 import cv2 as cv #pip install opencv-python
 import face_recognition
 import plotly.graph_objects as go
-
+from PIL import Image
 #import page Alimentation image
 import pickle
 import os
@@ -24,6 +24,7 @@ path = os.getcwd()
 encoded_dir = str(path) + "/dossier_encoded/"
 model_dir = str(path) + "/models/"
 enregistrement_dir = str(path) + "/enregistrement/"
+path_dir = str(path) + "/assets/"
 
 # Charger les listes depuis le fichier pickle
 with open(str(encoded_dir)+'known_faces.pkl', 'rb') as f:
@@ -52,17 +53,29 @@ def Application():
     open_webcam = st.button('Ouvrir la webcam')
     fig = go.Figure()
     def affichage_webcam():
-        st.write('Camera is open')
+        st.write("La webcam s'ouvre")
         # Open camera with OpenCV and keep in video stream:
         video_stream = cv.VideoCapture(0)
         width = int(video_stream.get(cv.CAP_PROP_FRAME_WIDTH))
         heigth= int(video_stream.get(cv.CAP_PROP_FRAME_HEIGHT))
-
+        frame_counter = 0
         fourcc = cv.VideoWriter_fourcc(*'mp4v')
         out = cv.VideoWriter(str(enregistrement_dir)+'output_0.mp4',fourcc, 3.7, (width,heigth))
         video_placeholder = st.empty()
-        graphe_emotion_placeholder = st.empty()
-        graphe_age_placeholder = st.empty()
+
+        # Create two columns
+        col1, col2, col3  = st.columns([1, 1, 1])
+        # Place the first chart in the first column
+        with col1:
+            graphe_emotion_placeholder = st.empty()
+        
+    # Place the second chart in the second column, on a new row
+        with col2:
+            graphe_age_placeholder = st.empty()
+
+        with col3 :
+            graphe_gender_placeholder = st.empty()
+
         stop_button = st.button('Arrêter la webcam')
         while not stop_button:
             ret, frame = video_stream.read()
@@ -72,30 +85,62 @@ def Application():
                 webcam.show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
                 out.write(frame)
 
+                if frame_counter == 0:
+                    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+                    # Appliquer un filtre de flou pour réduire le bruit
+                    blurred = cv.GaussianBlur(gray, (5, 5), 0)
+                    # Appliquer un seuillage adaptatif pour améliorer le contraste
+                    threshold = cv.adaptiveThreshold(blurred, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY_INV, 11, 4)
                 
-                #ca affiche 0 c'est bizarre 
-                if face_age: 
-                    #graph_elem = st.plotly_chart(fig)
-                    fig_age = webcam.plot_age_indicator(face_age)
-                    graphe_age_placeholder.plotly_chart(fig_age)
-                else :
-                    graphe_age_placeholder.image(path+"/emotion.jpg")
+                frame_counter += 1
+                print(frame_counter)
+                if frame_counter == 4:
+                    frame_counter = 0
+                    face_locations, face_names, face_gender, face_age, face_emotions, emotion_scores = webcam.detect_faces(frame, known_face_encodings, known_face_names)
+                    webcam.show_infos(frame, face_locations, face_names, face_gender, face_age, face_emotions)
 
-                #ca affiche 0 c'est bizarre 
-                if bool(emotion_scores): 
-                    #graph_elem = st.plotly_chart(fig)
-                    fig_maj = webcam.plot_emotion_wheel(emotion_scores)
-                    graphe_emotion_placeholder.plotly_chart(fig_maj)
-                else :
-                    graphe_emotion_placeholder.image(path+"/emotion.jpg")
-                # Display the resulting image
+                    #ca affiche 0 c'est bizarre 
+                    if len(face_age)==1: 
+                        fig_age = webcam.plot_age_indicator(face_age)
+                        graphe_age_placeholder.plotly_chart(fig_age, use_container_width=False)
+                    else :
+                        image = Image.open(path_dir+"age.png")
+                        max_size = (300, 300)
+                        image.thumbnail(max_size)
+                        graphe_age_placeholder.image(image)
+
+                    if len(face_emotions)>0: 
+                        fig_maj = webcam.plot_emotion_wheel(emotion_scores)
+                        graphe_emotion_placeholder.plotly_chart(fig_maj, use_container_width=False)
+                    elif ((len(face_emotions)==0) or (len(face_age)!=1)):
+                        image = Image.open(path_dir+"emotion.png")
+                        max_size = (300, 300)
+                        image.thumbnail(max_size)
+                        graphe_emotion_placeholder.image(image)
+
+                    if len(face_gender)==1 :
+                        if face_gender[0] == "Male":
+                            men = Image.open(path_dir+"men.png")
+                            max_size = (200, 200)
+                            men.thumbnail(max_size)
+                            graphe_gender_placeholder.image(men)
+                        elif face_gender[0] == "Female" :
+                            wem = Image.open(path_dir+"wemen.png")
+                            max_size = (200, 200)
+                            wem.thumbnail(max_size)
+                            graphe_gender_placeholder.image(wem)
+                    else :
+                        nonb = Image.open(path_dir+"non-binary.png")
+                        max_size = (200, 200)
+                        nonb.thumbnail(max_size)
+                        graphe_gender_placeholder.image(nonb)
+
+                # Display the resulting image            
                 video_placeholder.image(frame, channels="BGR")
-
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
         #if stop_button:
             #st.experimental_rerun()
-
         
         video_stream.release()
         out.release()
@@ -230,7 +275,7 @@ def reconnaissance_vocale():
     st.write("A l'origine nous souhaitions utiliser la reconnaissance vocale pour piloter notre application.")
     st.write("Malheureusement nous n'avons pas réussi à faire fonctionner la reconnaissance vocale pour toutes les fonctionnalitées.")
     st.write("Dans cet onglet vous pourrez webcamer les différentes fonctions vocales que nous avions mis en place.")
-    st.write("webcamez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''")
+    st.write("Voici les différentes commandes que nous avons implémenté : ''Démarrer la webcam '',   ''Démarrer la détection '',    ''Démarrer l'enregistrement'',    ''Arrêter la webcam '',    '' Arrêter la détection ''   et   '' Arrêter l'enregistrement''")
     def recognize_speech():
         r = sr.Recognizer()
         with sr.Microphone() as source:
