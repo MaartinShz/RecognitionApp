@@ -42,4 +42,4 @@ Vous pouvez ajouter des images dans le dossier /etu pour alimenter notre base. V
 
 A l'origine nous souhaitions utiliser la reconnaissance vocale pour piloter notre application. Malheureusement nous n'avons pas réussi à faire fonctionner la reconnaissance vocale pour toutes les fonctionnalitées. Dans cet onglet vous pourrez tester les différentes fonctions vocales que nous avions mis en place. Testez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''
 
-![pres_appli](/img/...)
+![pres_appli](/img/Reco_vocale.png)
