@@ -6,8 +6,8 @@ Le challenge Web Mining vise à développer une application permettant le pilota
 
 ## Organisation du repository
 - *requirements. txt :* Constitue l'ensemble des paquets python nécessaire en vue de l'installation et de l'execution de notre application
-`Répertoire img` : Ensemble des images intégrée au readme
-`Répertoire streamlit` : Emsemble des fichiers pour l'application
+- `Répertoire img` : Ensemble des images intégrée au readme
+- `Répertoire streamlit` : Emsemble des fichiers pour l'application
   - *Fichier app.py :* Fichier pour lancer l'application, il contient egalement les fonctions utiles à la reconnaissance vocale 
   - *Fichier face_encoding.py :* Fichier qui permet d'encoder des images
   - *Fichier webcam.py :* Fichier qui contient les fonctions utiles à la reconnaissance faciale
