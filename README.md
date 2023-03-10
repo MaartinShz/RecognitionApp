@@ -5,10 +5,16 @@
 Le challenge Web Mining vise à développer une application permettant le pilotage de la webcam d'un ordinateur pour détecter les personnes présentes sur la vidéo en temps réel, et ainsi, reconnaître les étudiants faisant partie de la promotion SISE 2022-2023 en y ajoutant les informations relatives sur leur émotion, genre et âge. L'application doit être pilotée vocalement via le microphone de l'ordinateur et doit s'appuyer sur un modèle prédictif basé sur les photos d'identité étiquetées des étudiants de la promotion.
 
 ## Organisation du repository
-- *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
-- *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
-- *Répertoire img :* Ensemble des images intégrée au readme
 - *requirements. txt :* Constitue l'ensemble des paquets python nécessaire en vue de l'installation et de l'execution de notre application
+- `Répertoire img` : Ensemble des images intégrée au readme
+- `Répertoire streamlit` : Emsemble des fichiers pour l'application
+  - *Fichier app.py :* Fichier pour lancer l'application, il contient egalement les fonctions utiles à la reconnaissance vocale 
+  - *Fichier face_encoding.py :* Fichier qui permet d'encoder des images
+  - *Fichier webcam.py :* Fichier qui contient les fonctions utiles à la reconnaissance faciale
+  - *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
+  - *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
+  - *Répertoire etu :* Contient toutes les images de la base de reconnaissance
+  - Répertoire enregistrement :* Contient la vidéo enregistré si demandé
 
 
 
@@ -36,10 +42,10 @@ Une fenêtre s'ouvrira et vous pourrez voir la webcam de votre ordinateur. La d�
 
 Vous pouvez ajouter des images dans le dossier /etu pour alimenter notre base. Vous pouvez prendre une photo avec votre webcam qui sera importer en local dans le dossier /etu. Il vous faudra ensuite importer la photo pour la transformer et l'ajouter à notre base.
 
-![pres_appli](/img/...)
+![pres_appli](/img/Alim.png)
 
 - Reconnaissance vocale
 
 A l'origine nous souhaitions utiliser la reconnaissance vocale pour piloter notre application. Malheureusement nous n'avons pas réussi à faire fonctionner la reconnaissance vocale pour toutes les fonctionnalitées. Dans cet onglet vous pourrez tester les différentes fonctions vocales que nous avions mis en place. Testez par exemple '' Démarrer la détection '' ou '' Arrêter l'enregistrement ''
 
-![pres_appli](/img/...)
+![pres_appli](/img/Reco_vocale.png)
