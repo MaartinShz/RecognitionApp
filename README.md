@@ -36,7 +36,7 @@ Une fenêtre s'ouvrira et vous pourrez voir la webcam de votre ordinateur. La d�
 
 Vous pouvez ajouter des images dans le dossier /etu pour alimenter notre base. Vous pouvez prendre une photo avec votre webcam qui sera importer en local dans le dossier /etu. Il vous faudra ensuite importer la photo pour la transformer et l'ajouter à notre base.
 
-![pres_appli](/img/...)
+![pres_appli](/img/Alim.png)
 
 - Reconnaissance vocale
 
