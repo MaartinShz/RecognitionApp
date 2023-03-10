@@ -1,12 +1,23 @@
 # Challenge WebMining
 ## Reconnaissance faciale et identification sur des vidéos WEBCAM Commande vocale – Pilotage par la parole
+## Présentation du challenge 
 
 Le challenge Web Mining vise à développer une application permettant le pilotage de la webcam d'un ordinateur pour détecter les personnes présentes sur la vidéo en temps réel, et ainsi, reconnaître les étudiants faisant partie de la promotion SISE 2022-2023 en y ajoutant les informations relatives sur leur émotion, genre et âge. L'application doit être pilotée vocalement via le microphone de l'ordinateur et doit s'appuyer sur un modèle prédictif basé sur les photos d'identité étiquetées des étudiants de la promotion.
+
+## Organisation du repository
+- *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
+- *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
+- *Répertoire img :* Ensemble des images intégrée au readme
+- *requirements. txt :* Constitue l'ensemble des paquets python nécessaire en vue de l'installation et de l'execution de notre application
+
+
 
 ## Lancement de l'application
 
 ```
-martin
+
+pip install --no-cache-dir -r requirements.txt
+streamlit run app.py
 
 ```
 
