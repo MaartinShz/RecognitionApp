@@ -14,23 +14,24 @@ Le challenge Web Mining vise à développer une application permettant le pilota
   - *Répertoire assets :* Ensemble des images .png intégrées à l'application (age, emotion, men, non_binary & women)
   - *Répertoire models :* Regroupe l'ensemble des modèles pré-entraînées pour la prédiction du genre, de l'âge et de l'émotion
   - *Répertoire etu :* Contient toutes les images de la base de reconnaissance
-  - Répertoire enregistrement :* Contient la vidéo enregistré si demandé
+  - *Répertoire enregistrement :* Contient la vidéo enregistré si demandé
 
 
 
 ## Lancement de l'application
+Soit en créant un environment et installer tous les packages "manuellement" :
 
 ```
 pip install speech_recognition
 pip install streamlit
-pip install tenserflow
+pip install tensorflow
 pip install --no-cache-dir -r requirements.txt
 
 cd streamlit
 streamlit run app.py
 
 ```
-Vous pouvez également utiliser le fichier environnement.yml pour créer votre environnement.
+Vous pouvez également utiliser le fichier environnement.yml pour créer votre environnement automatiquement 
 
 ```
 conda env create -f environnement.yml
