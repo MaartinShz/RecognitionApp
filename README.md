@@ -12,5 +12,9 @@ martin
 
 ## Fonctionnement de l'application
 
+Notre application propose plusieurs fonctionalités que vous pourrez retrouvez dans les différents onglets. Vous pourrez utiliser notre application pour détecter les visages et les émotions des personnes présentes sur la webcam de votre ordinateur. Vous pourrez également importer ou prendre une photo afin d'alimenter notre base d'apprentissage des visages. Pour l'utiliser, cliquez sur le bouton 'Ouvrir la webcam' ci-dessous pour ouvrir la webcam de votre ordinateur et lancer l'enregistrement la vidéo.
+
+Une fenêtre s'ouvrira et vous pourrez voir la webcam de votre ordinateur. La détection des visages et des émotions se fera en temps réel. Vous pourrez également profiter de visualisations des émotions et des âges des personnes détectées sur la vidéo. Stoppez l'affichage et l'enregistrement de la webcam en cliquant sur le bouton 'Stop webcam'. Vous pourrez ensuite télécharger la vidéo en cliquant sur le bouton 'Télécharger la vidéo' (voir panneau latéral). Nous souhaitions implémenter la reconnaissance vocale pour lancer l'enregistrement de la vidéo, mais nous n'avons pas réussi à le faire fonctionner pour toutes les fonctionnalitées. Si vous cliquez sur le bouton 'Lancer la reconnaissance vocale', vous pourrez lancer l'enregistrement de la vidéo en disant ''Démarrer la webcam''.
+
 ![pres_appli](/img/pres_appli.png)
 
