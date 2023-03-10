@@ -6,7 +6,9 @@ Le challenge Web Mining vise à développer une application permettant le pilota
 ## Lancement de l'application
 
 ```
-martin
+
+pip install --no-cache-dir -r requirements.txt
+streamlit run app.py
 
 ```
 
