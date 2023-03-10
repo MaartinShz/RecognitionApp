@@ -12,7 +12,7 @@ martin
 
 ## Fonctionnement de l'application
 
-![predict](https://github.com/h-titouan/PLSISE/blob/main/img/function_predict.png)
+![predict](https://github.com/MaartinShz/RecognitionApp/edit/main/img/pres_appli.jpeg)
 
 
 
